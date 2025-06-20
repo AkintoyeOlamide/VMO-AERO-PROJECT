@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const videoSources = ['/main-video.mp4', '/Hero-video-4.mp4', '/Hero-video-1.mp4', '/Hero-video-3.mp4'];
+const videoSources = ['/vmo-aero.mp4'];
 
 const Hero: React.FC = () => {
   const [mainHeadingText, setMainHeadingText] = useState('');
@@ -67,17 +67,7 @@ const Hero: React.FC = () => {
   }, [typingDone]);
 
   const handleVideoLoaded = (videoEl: HTMLVideoElement) => {
-    if (videoIndex === 0) {
-      videoEl.playbackRate = 2.0;
-      videoEl.currentTime = 0;
-    } else {
-      videoEl.playbackRate = 1.0;
-      videoEl.currentTime = 0;
-    }
-  };
-
-  const handleVideoEnd = () => {
-    setVideoIndex((prev) => (prev + 1) % videoSources.length);
+    videoEl.currentTime = 0;
   };
 
   const handleScrollDown = () => {
@@ -88,9 +78,9 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section id="home" className="relative min-h-screen bg-cover bg-center flex items-center justify-center overflow-hidden">
+    <section id="home" className="relative min-h-[60vh] sm:min-h-screen bg-cover bg-center flex items-center justify-center overflow-hidden">
       {/* Airplane Video */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden w-full h-full sm:min-h-screen bg-black">
         <video
           ref={videoRef}
           key={videoIndex}
@@ -98,28 +88,28 @@ const Hero: React.FC = () => {
           autoPlay
           muted
           playsInline
-          className="w-full h-full object-cover pointer-events-none"
+          loop
+          className="w-full h-full object-cover object-center"
           onLoadedMetadata={e => handleVideoLoaded(e.currentTarget)}
-          onEnded={handleVideoEnd}
         />
       </div>
       {/* Move content to bottom */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center absolute bottom-0 left-0 right-0 z-20 pb-16">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center absolute bottom-0 left-0 right-0 z-20 hero-content">
         <div className="max-w-6xl mx-auto">
           {isHeadingVisible && (
-            <h1 className="font-['Helvetica'] text-2xl md:text-3xl lg:text-4xl font-light text-silver-light mb-4 min-h-[4rem] tracking-wide drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.5)] transition-all duration-300">
+            <h1 className="font-['Helvetica'] text-lg sm:text-2xl md:text-3xl lg:text-4xl font-light text-silver-light mb-4 min-h-[2.5rem] sm:min-h-[4rem] tracking-wide drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.5)] transition-all duration-300 px-2">
               {mainHeadingText}
             </h1>
           )}
           <div className={`transform transition-all duration-500 ease-out ${showPopup ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-            <p className="text-silver text-base md:text-lg max-w-4xl mx-auto">
+            <p className="text-silver text-xs sm:text-base md:text-lg max-w-4xl mx-auto px-2">
               Ready to elevate your aviation experience?
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
-              <Link to="/about" className="btn-primary">
+            <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4 mt-4 sm:mt-8 px-4">
+              <Link to="/about" className="btn-primary text-xs sm:text-base py-2 sm:py-3 px-3 sm:px-6">
                 Learn More
               </Link>
-              <Link to="/services" className="btn-secondary bg-gold text-black hover:bg-gold/90 font-bold">
+              <Link to="/services" className="btn-secondary bg-gold text-black hover:bg-gold/90 font-bold text-xs sm:text-base py-2 sm:py-3 px-3 sm:px-6 mb-4 sm:mb-0">
                 Discover the VMO Experience
               </Link>
             </div>

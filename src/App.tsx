@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Hero from './components/Hero';
@@ -18,6 +18,13 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import NewsletterPopup from './components/NewsletterPopup';
 import Booking from './pages/Booking';
 import Bookings from './pages/Bookings';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminProtectedRoute from './components/AdminProtectedRoute';
+import AdminBlogList from './pages/AdminBlogList';
+import AdminCreateBlog from './pages/AdminCreateBlog';
+import AdminEditBlog from './pages/AdminEditBlog';
+import AdminNewsletterList from './pages/AdminNewsletterList';
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -36,11 +43,62 @@ const App: React.FC = () => {
     setShowNewsletter(false);
   };
 
+  const adminPaths = [
+    '/admin/login',
+    '/admin/dashboard',
+    '/admin/blogs',
+    '/admin/blogs/create',
+  ];
+  const isAdminRoute = adminPaths.some(path => location.pathname.startsWith(path));
+
   return (
     <div className="min-h-screen bg-navy text-silver">
       <ScrollToTop />
-      <Header />
+      {!isAdminRoute && <Header />}
       <Routes>
+        {/* Admin Routes */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <AdminProtectedRoute>
+              <AdminDashboard />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/blogs"
+          element={
+            <AdminProtectedRoute>
+              <AdminBlogList />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/blogs/create"
+          element={
+            <AdminProtectedRoute>
+              <AdminCreateBlog />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/blogs/edit/:id"
+          element={
+            <AdminProtectedRoute>
+              <AdminEditBlog />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/newsletters"
+          element={
+            <AdminProtectedRoute>
+              <AdminNewsletterList />
+            </AdminProtectedRoute>
+          }
+        />
+        {/* Main Site Routes */}
         <Route
           path="/"
           element={
@@ -66,8 +124,10 @@ const App: React.FC = () => {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/booking" element={<Booking />} />
         <Route path="/bookings" element={<Bookings />} />
+        <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
+        <Route path="/admin/" element={<Navigate to="/admin/login" replace />} />
       </Routes>
-      <Footer />
+      {!isAdminRoute && <Footer />}
     </div>
   );
 };
